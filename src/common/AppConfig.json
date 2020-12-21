@@ -1,0 +1,47 @@
+{
+  "ApiConfig": {
+    "baseUrl": "http://46.224.6.83:8000/",
+    "baseUrl2": "http://192.168.1.14:5000/"
+  },
+  "WooCommerce": {
+    "url": "http://demo.mstore.io",
+    "consumerKey": "ck_b7594bc4391db4b56c635fe6da1072a53ca4535a",
+    "consumerSecret": "cs_980b9edb120e15bd2a8b668cacc734f7eca0ba40"
+  },
+  "HorizonLayout": [
+    {
+      "layout": "circleCategory"
+    },
+    {
+      "layout": "bannerHigh",
+      "categoryOrTag": 273,
+      "tag": 273
+    },
+    {
+      "layout": "bannerImage",
+      "categoryOrTag": 23,
+      "imageBanner": "https://user-images.githubusercontent.com/1459805/60091808-a19b8a00-976f-11e9-9cc7-576ca05c2442.png",
+      "category": 23
+    },
+    {
+      "name": "featureProducts",
+      "image": "",
+      "layout": "threeColumn",
+      "categoryOrTag": 26,
+      "category": 26
+    },
+    {
+      "name": "manCollections",
+      "layout": "twoColumn",
+      "categoryOrTag": 21,
+      "tag": 21
+    },
+    {
+      "name": "News",
+      "layout": "Blog",
+      "categoryOrTag": 21,
+      "tag": 21
+    }
+  ],
+  "MainColor": "#3FC1BE"
+}
