@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="274" viewBox="0 0 375 274">
+    <defs>
+        <clipPath id="prefix__clip-path">
+            <rect id="prefix__card-2" width="375" height="274" rx="16" transform="translate(0 21.798)"/>
+        </clipPath>
+    </defs>
+    <g id="prefix__Group_937" data-name="Group 937" transform="translate(-691.64 16.562)" style="opacity:.9">
+        <g id="prefix__Group_320" data-name="Group 320" transform="translate(691.64 -38.36)">
+            <circle id="prefix__Ellipse_150" cx="208.37" cy="208.37" r="208.37" data-name="Ellipse 150" transform="translate(-162.513 -142.047)" style="opacity:.1;fill:#04a9f5"/>
+            <circle id="prefix__Ellipse_151" cx="176.711" cy="176.711" r="176.711" data-name="Ellipse 151" transform="translate(-139.974 -205.524)" style="fill:#04a9f5;opacity:.15"/>
+        </g>
+    </g>
+</svg>

@@ -7,13 +7,16 @@ const navGroup = (props) => {
     let navItems = '';
     if (props.group.children) {
         const groups = props.group.children;
+        const prefixurl = props.prefix;
+        console.log("mahsddddddddddd" + prefixurl)
+
         navItems = Object.keys(groups).map(item => {
             item = groups[item];
             switch (item.type) {
                 case 'collapse':
-                    return <NavCollapse key={item.id} collapse={item} type="main" />;
+                    return <NavCollapse key={item.id} collapse={item} type="main" prefix={prefixurl} />;
                 case 'item':
-                    return <NavItem layout={props.layout} key={item.id} item={item} />;
+                    return <NavItem layout={props.layout} key={item.id} item={item} prefix={prefixurl} />;
                 default:
                     return false;
             }

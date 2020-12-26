@@ -30,6 +30,7 @@ class Navigation extends Component {
     }
 
     render() {
+
         let navClass = [
             'pcoded-navbar',
             'direction-rtl'
@@ -109,7 +110,7 @@ class Navigation extends Component {
         let navContent = (
             <div className="navbar-wrapper">
                 <NavLogo collapseMenu={this.props.collapseMenu} windowWidth={this.props.windowWidth} onToggleNavigation={this.props.onToggleNavigation} />
-                <NavContent navigation={navigation.items} />
+                <NavContent navigation={navigation.items} prefix={this.props.prefix} />
             </div>
         );
         if (this.props.windowWidth < 992) {
@@ -117,7 +118,7 @@ class Navigation extends Component {
                 <OutsideClick>
                     <div className="navbar-wrapper">
                         <NavLogo collapseMenu={this.props.collapseMenu} windowWidth={this.props.windowWidth} onToggleNavigation={this.props.onToggleNavigation} />
-                        <NavContent navigation={navigation.items} />
+                        <NavContent navigation={navigation.items} prefix={this.props.prefix} />
                     </div>
                 </OutsideClick>
             );

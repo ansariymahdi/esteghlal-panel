@@ -38,4 +38,11 @@ export default class AuthenticationController {
         const memberData = await localStorage.getItem(AppConstants.USER_NAME);
         return { token: authToken, memberData: memberData };
     };
+    static async isLoggedIn() {
+        const authToken = await localStorage.getItem(AppConstants.TOKEN);
+        if (authToken) {
+            return true;
+        }
+
+    };
 }

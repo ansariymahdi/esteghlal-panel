@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import windowSize from 'react-window-size';
 
 import Aux from "../../../../../../hoc/_Aux";
@@ -12,6 +11,8 @@ import * as actionTypes from "../../../../../../store/actions";
 class NavItem extends Component {
 
     render() {
+        // var isActive = this.context.router.route.location.pathname === this.props.to;
+        // var className = isActive ? 'active' : '';
         let itemTitle = this.props.item.title;
         if (this.props.item.icon) {
             itemTitle = <span className="pcoded-mtext">{this.props.item.title}</span>;
@@ -33,13 +34,14 @@ class NavItem extends Component {
                 </a>
             );
         } else {
+            console.log(this.props.prefix)
             subContent = (
-                <NavLink to={this.props.item.url} className="nav-link" exact={true} target={itemTarget}>
+                <Link to={`${this.props.prefix}${this.props.item.url}`} className="nav-link" exact={true} target={itemTarget} activeClassName="active" >
                     <NavIcon items={this.props.item} />
                     {itemTitle}
                     <NavBadge layout={this.props.layout} items={this.props.item} />
 
-                </NavLink>
+                </Link>
             );
         }
         let mainContent = '';
@@ -54,7 +56,7 @@ class NavItem extends Component {
                 );
             } else {
                 mainContent = (
-                    <li className={this.props.item.classes}>{subContent}</li>
+                    <li className={this.props.item.classesz}>{subContent}</li>
                 );
             }
         }
@@ -81,4 +83,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(windowSize(NavItem)));
+export default connect(mapStateToProps, mapDispatchToProps)(windowSize(NavItem));

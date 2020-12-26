@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from "redux";
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import 'rc-time-picker/assets/index.css';
-import App from './App/index';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter as Router } from 'react-router-dom';
 import reducer from './store/reducer';
 import authReducer from './store/auth.reducer';
-import config from './config';
+import Routes from './routes';
 import { ToastProvider, useToasts } from 'react-toast-notifications'
+import { createBrowserHistory } from 'history';
+import $ from 'jquery';
+
+window.jQuery = $;
+window.$ = $;
+global.jQuery = $;
 const rootReducer = combineReducers({
     reducer: reducer,
     authReducer: authReducer,
@@ -18,13 +23,18 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 const app = (
+
     <Provider store={store}>
         <ToastProvider placement="bottom-left">
-            <BrowserRouter>
-                {/* basename="/datta-able" */}
-                <App />
+            {/* <BrowserRouter> */}
+            {/* basename="/datta-able" */}
+            {/* <App /> */}
 
-            </BrowserRouter>
+            {/* </BrowserRouter> */}
+            <Router history={createBrowserHistory()}>
+                <Routes />
+            </Router>
+
         </ToastProvider>
     </Provider>
 );

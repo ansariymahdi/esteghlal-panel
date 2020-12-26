@@ -1292,14 +1292,15 @@
         &.pcoded-trigger {
           &:after {
             content: "";
-            background-color: #f8ce22;
+            // background-color: #f8ce22;
+            content: "";
+            background-color: #04a9f5;
             z-index: 1027;
             position: absolute;
-            left: 19px;
-            top: auto;
-            bottom: 5px;
-            width: 23px;
-            height: 2px;
+            right: 0;
+            top: 5px;
+            width: 3px;
+            height: calc(100% - 5px);
           }
         }
 

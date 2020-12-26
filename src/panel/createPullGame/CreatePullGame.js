@@ -12,7 +12,7 @@ import { useToasts } from 'react-toast-notifications'
 import { useSelector } from "react-redux";
 import { PullGame } from './../../services'
 import TimePicker from 'rc-time-picker';
-import { withRouter } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 import InputConstants from './../../constants/InputConstants'
 import moment from 'moment';
 const options = [
@@ -49,6 +49,7 @@ const CreatePullGame = props => {
     const { addToast } = useToasts()
     const token = useSelector(state => state.authReducer.token);
     const member = useSelector(state => state.authReducer.memberData);
+    let history = useHistory();
     const [errors, setErrors] = useState({});
     const [name, setName] = useState();
     const [selectedDay, setSelectedDay] = useState(null);
@@ -120,7 +121,11 @@ const CreatePullGame = props => {
             },
             (err) => {
                 // setIsLoading(false);
+                props.onShowLoader();
                 console.log(err);
+                localStorage.removeItem('token');
+                history.push('/');
+
             },
         );
 
@@ -505,4 +510,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreatePullGame));
+export default connect(mapStateToProps, mapDispatchToProps)(CreatePullGame);

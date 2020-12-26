@@ -6,8 +6,8 @@ const ErrorPage = React.lazy(() => import('./panel/errorNotFoundPage/ErrorNotFou
 
 const route = [
     { path: '/auth/login', exact: true, name: 'Signup 1', component: Login },
-    { path: '/auth/signin-1', exact: true, name: 'Signin 1', component: Signin1 },
-    { path: '/notFound', exact: true, name: 'error', component: ErrorPage }
+    { path: '/auth/signin-1', name: 'Signin 1', component: Signin1 },
+    { path: '/notFound', name: 'error', component: ErrorPage }
 ];
 
 export default route;

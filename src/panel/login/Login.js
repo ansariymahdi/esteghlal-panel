@@ -9,7 +9,7 @@ import Logo from './../../assets/images/logo.png'
 import LoginIcon from './../../assets/images/login.png'
 // import Login from './../../assets/images/login.jpg'
 import InputLabel from './../../App/components/inputLabel/InputLabel'
-import { withRouter } from 'react-router-dom'
+// import { withRouter } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { AuthService } from './../../services'
 import { setLoginAuth } from './../../store/localeStorage/LocaleStorage'
@@ -17,8 +17,10 @@ import { connect } from 'react-redux';
 import { setData } from './../../store/auth.action';
 import * as actionTypes from "./../../store/actions";
 import axios from 'axios'
-const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
+
+import { useHistory } from "react-router-dom";
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 const formReducer = (state, action) => {
     if (action.type === FORM_INPUT_UPDATE) {
         const updatedValues = {
@@ -46,6 +48,8 @@ const Login = (props) => {
     const [inputValues, setInputValues] = useState({ email: "", password: "" })
 
     const dispatch = useDispatch();
+    let history = useHistory();
+
     const setAuthData = useCallback((memberData, token) => {
         dispatch(setData(memberData, token))
     }, [dispatch]);
@@ -95,7 +99,7 @@ const Login = (props) => {
         //     [name]: value
         // });
     }
-    const { history } = props;
+
     const onSubmitLogin = () => {
         props.onShowLoader();
         console.log(formState.inputValues);
@@ -112,7 +116,7 @@ const Login = (props) => {
                 setLoginAuth(response.access_token, formState.inputValues.username);
                 setAuthData(formState.inputValues.username, response.access_token);
                 props.onShowLoader();
-                history.push("/menu/dashboard");
+                history.push("/app");
 
 
 
@@ -154,9 +158,9 @@ const Login = (props) => {
                     <div class="row d-flex">
                         <div class="col-lg-6">
                             <div class="card1 pb-5">
-                                <div class="row"> <img src={Logo} class="logo" /> </div>
+                                {/* <div class="row"> <img src={Logo} class="logo" /> </div> */}
                                 <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
-                                    <MobileLoginBro class="image" />
+                                    {/* <MobileLoginBro class="image" /> */}
 
                                 </div>
                             </div>
@@ -205,10 +209,12 @@ const Login = (props) => {
 
                                 <div class="row px-3 mb-4">
                                     <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1" type="checkbox" name="chk" class="custom-control-input" />
-                                        <label for="chk1" class="custom-control-label text-sm"> مرا به خاطر بسپار</label> </div>
+                                        <label for="chk1" class="custom-control-label text-sm"> مرا به خاطر بسپار</label>
+                                        <label for="chk1" class="custom-control-label text-sm" data-testid="counter">1</label> </div>
+
                                     {/* <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a> */}
                                 </div>
-                                <div class="row mb-3 px-3 "> <button type="submit" class="btn btn-blue text-center" onClick={() => onSubmitLogin()}>ورود</button> </div>
+                                <div class="row mb-3 px-3 "> <button type="submit" data-testid="btn-login" class="btn btn-blue text-center" onClick={() => onSubmitLogin()}>ورود</button> </div>
                                 {/* <div class="row mb-4 px-3"> <small class="font-weight-bold">Don't have an account? <a class="text-danger ">Register</a></small> </div> */}
                             </div>
                         </div>
@@ -220,7 +226,7 @@ const Login = (props) => {
                     </div>
                 </div>
             </div>
-        </Aux>
+        </Aux >
         // <Aux>
         //     <div class="bubble"></div>
         //     <div class="bubble"></div>
@@ -369,4 +375,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

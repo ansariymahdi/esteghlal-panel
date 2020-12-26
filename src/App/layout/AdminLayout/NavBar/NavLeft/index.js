@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Dropdown} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Dropdown } from 'react-bootstrap';
 import windowSize from 'react-window-size';
 
 import NavSearch from './NavSearch';
@@ -8,8 +8,14 @@ import Aux from "../../../../../hoc/_Aux";
 import DEMO from "../../../../../store/constant";
 import * as actionTypes from "../../../../../store/actions";
 
+import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
 class NavLeft extends Component {
+    state = {
+        listOpen: false,
+        isOpen: false
 
+    };
+    toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
     render() {
         let iconFullScreen = ['feather'];
         iconFullScreen = (this.props.isFullScreen) ? [...iconFullScreen, 'icon-minimize'] : [...iconFullScreen, 'icon-maximize'];
@@ -22,13 +28,13 @@ class NavLeft extends Component {
         if (this.props.rtlLayout) {
             dropdownRightAlign = true;
         }
-
+        const menuClass = `dropdown-menu${this.state.isOpen ? " show" : ""}`;
 
         return (
             <Aux>
                 <ul className="navbar-nav mr-auto">
                     <li><a href={DEMO.BLANK_LINK} className="full-screen" onClick={this.props.onFullScreen}><i className={iconFullScreen.join(' ')} /></a></li>
-                    <li className={navItemClass.join(' ')}>
+                    {/* <li className={navItemClass.join(' ')}>
                         <Dropdown alignRight={dropdownRightAlign}>
                             <Dropdown.Toggle variant={'link'} id="dropdown-basic">
                                 Dropdown
@@ -41,8 +47,29 @@ class NavLeft extends Component {
                                 </Dropdown.Menu>
                             </ul>
                         </Dropdown>
+                    </li> */}
+
+                    <li>
+                        <div className="dropdown drp-user" onClick={this.toggleOpen} >
+                            <i className="icon feather icon-settings" />
+                            <div className={menuClass} aria-labelledby="dropdownMenuButton">
+                                <div className="pro-head">
+                                    <img src={Avatar1} className="img-radius" alt="User Profile" />
+                                    <span>John Doe</span>
+                                    <a href={DEMO.BLANK_LINK} className="dud-logout" title="Logout">
+                                        <i className="feather icon-Wlog-out" />
+                                    </a>
+                                </div>
+                                <ul className="pro-body">
+                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-settings" /> Settings</a></li>
+                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-user" /> Profile</a></li>
+                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-mail" /> My Messages</a></li>
+                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-lock" /> Lock Screen</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </li>
-                    <li className="nav-item"><NavSearch/></li>
+                    <li className="nav-item"><NavSearch /></li>
                 </ul>
             </Aux>
         );
@@ -58,7 +85,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFullScreen: () => dispatch({type: actionTypes.FULL_SCREEN}),
+        onFullScreen: () => dispatch({ type: actionTypes.FULL_SCREEN }),
     }
 };
 

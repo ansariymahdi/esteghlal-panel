@@ -10,16 +10,23 @@ export default {
                     id: 'dashboard',
                     title: 'داشبورد',
                     type: 'item',
-                    url: '/menu/dashboard',
+                    url: '/',
                     icon: 'feather icon-home',
                 },
                 {
                     id: 'createPullGame',
                     title: 'نظر سنجی',
                     type: 'item',
-                    url: '/menu/createPullGame',
+                    url: '/createPullGame',
                     icon: 'feather icon-user',
-                }
+                },
+                // {
+                //     id: 'pullGame',
+                //     title: 'نظرcsa سنجی',
+                //     type: 'item',
+                //     url: '/pullGame',
+                //     icon: 'feather icon-user',
+                // }
             ]
         },
         // {
