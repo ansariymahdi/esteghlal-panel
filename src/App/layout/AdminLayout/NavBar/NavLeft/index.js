@@ -7,8 +7,9 @@ import NavSearch from './NavSearch';
 import Aux from "../../../../../hoc/_Aux";
 import DEMO from "../../../../../store/constant";
 import * as actionTypes from "../../../../../store/actions";
-
+import { withRouter } from 'react-router-dom'
 import Avatar1 from '../../../../../assets/images/user/avatar-1.jpg';
+
 class NavLeft extends Component {
     state = {
         listOpen: false,
@@ -16,6 +17,12 @@ class NavLeft extends Component {
 
     };
     toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
+
+    logout = () => {
+        console.log(this.props)
+        localStorage.removeItem('token');
+        this.props.history.push("/");
+    }
     render() {
         let iconFullScreen = ['feather'];
         iconFullScreen = (this.props.isFullScreen) ? [...iconFullScreen, 'icon-minimize'] : [...iconFullScreen, 'icon-maximize'];
@@ -30,9 +37,10 @@ class NavLeft extends Component {
         }
         const menuClass = `dropdown-menu${this.state.isOpen ? " show" : ""}`;
 
+
         return (
             <Aux>
-                <ul className="navbar-nav mr-auto">
+                <ul className="navbar-nav mr-auto ">
                     <li><a href={DEMO.BLANK_LINK} className="full-screen" onClick={this.props.onFullScreen}><i className={iconFullScreen.join(' ')} /></a></li>
                     {/* <li className={navItemClass.join(' ')}>
                         <Dropdown alignRight={dropdownRightAlign}>
@@ -50,26 +58,26 @@ class NavLeft extends Component {
                     </li> */}
 
                     <li>
-                        <div className="dropdown drp-user" onClick={this.toggleOpen} >
+                        <div className="dropdown drp-user direction-rtl" onClick={this.toggleOpen} >
                             <i className="icon feather icon-settings" />
                             <div className={menuClass} aria-labelledby="dropdownMenuButton">
                                 <div className="pro-head">
                                     <img src={Avatar1} className="img-radius" alt="User Profile" />
-                                    <span>John Doe</span>
-                                    <a href={DEMO.BLANK_LINK} className="dud-logout" title="Logout">
-                                        <i className="feather icon-Wlog-out" />
+                                    <span> پدرام حسینی</span>
+                                    <a className="dud-logout" title="Logout" onClick={() => this.logout()}>
+                                        <i className="feather icon-log-out" />
                                     </a>
                                 </div>
                                 <ul className="pro-body">
-                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-settings" /> Settings</a></li>
-                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-user" /> Profile</a></li>
-                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-mail" /> My Messages</a></li>
-                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-lock" /> Lock Screen</a></li>
+                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-settings" /> تنظیمات</a></li>
+                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-user" /> نمایه</a></li>
+                                    <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-mail" /> پیام ها</a></li>
+                                    {/* <li><a href={DEMO.BLANK_LINK} className="dropdown-item"><i className="feather icon-lock" /> Lock Screen</a></li> */}
                                 </ul>
                             </div>
                         </div>
                     </li>
-                    <li className="nav-item"><NavSearch /></li>
+                    {/* <li className="nav-item"><NavSearch /></li> */}
                 </ul>
             </Aux>
         );
@@ -89,4 +97,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(windowSize(NavLeft));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavLeft));

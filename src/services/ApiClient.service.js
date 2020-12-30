@@ -1,14 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosPromise } from "axios";
+import axios from "axios";
 import { Observable } from "rxjs";
-
-// export interface RxiosConfig extends AxiosRequestConfig {}
-
-// interface RequestArgs {
-//   method: HttpMethod;
-//   url: string;
-//   queryParams?: object;
-//   payload?: object;
-// }
 
 const HttpMethod = {
   GET: "GET",

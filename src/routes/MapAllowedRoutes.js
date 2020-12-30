@@ -6,7 +6,7 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom';
 * This is the route utility component used for generating
 * routes and child routes it only requires routes array and basePath
 */
-function MapAllowedRoutes({ routes, basePath, isAddNotFound }) {
+function MapAllowedRoutes({ routes, basePath, isAddNotFound, props }) {
 	const match = useRouteMatch(basePath);
 	return (
 		<Switch>
@@ -22,7 +22,7 @@ function MapAllowedRoutes({ routes, basePath, isAddNotFound }) {
 
 				return (
 					<Route {...rest} key={path} path={`${match.path}${path}`}>
-						<Component children={children} />
+						<Component children={children} {...props} />
 					</Route>
 				)
 			})}

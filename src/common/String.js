@@ -2,13 +2,10 @@ export default {
     accept: 'تایید',
     login: 'ورود',
     remember_username_password: 'مرا به خاطر بسپار',
-    username: 'نام کاربری',
     password: 'گذرواژه',
 
     hello: 'Hello',
-    login: 'ورود',
     signup: 'ثبت نام',
-    accept: 'تایید',
     verification_code: 'کد تایید',
     first_name: 'نام',
     last_name: 'نام خانوادگی',
@@ -49,11 +46,11 @@ export default {
     welcome_to_this_app: 'به برنامه خوش آمدید!',
     sign_up_not_yet: 'هنوز ثبت نام نکرده اید؟!',
     register: ' ثبت نام کنید',
-    password: 'گذر واژه',
     internet_connection_problem: 'لطفا اتصال اینترنت خود را بازبینی فرمایید',
     connection_problem: 'ارتباط با سرور دچار مشکل شده است',
     internal_server_error: 'سرور دچار مشکل شده است',
     username_password_incorrect: 'نام کاربری یا رمز عبور اشتباه می باشد',
+    enter_to_app_successfully: 'خوش آمدید',
     edit_profile: 'ویرایش پروفایل',
     notification: 'اطلاعیه ها',
     update_app: 'به روز رسانی نرم افزار',
@@ -107,4 +104,5 @@ export default {
 
     home: 'خانه',
     stadium_name: 'ورزشگاه بازی',
+    add_game: "ایجاد مسابقه"
 }

@@ -1,8 +1,10 @@
+// import Game from "module";
+
 export default {
     items: [
         {
             id: 'navigation',
-            title: 'منو',
+            title: 'منو ی اصلی',
             type: 'group',
             icon: 'icon-navigation',
             children: [
@@ -13,9 +15,32 @@ export default {
                     url: '/',
                     icon: 'feather icon-home',
                 },
+
+                // {
+                //     id: 'pullGame',
+                //     title: 'نظرcsa سنجی',
+                //     type: 'item',
+                //     url: '/pullGame',
+                //     icon: 'feather icon-user',
+                // }
+            ]
+        }, {
+            id: 'navigation-pull',
+            title: 'نظر سنجی',
+            type: 'group',
+            icon: 'icon-navigation',
+            children: [
                 {
                     id: 'createPullGame',
-                    title: 'نظر سنجی',
+                    title: 'ایجاد بازی',
+                    type: 'item',
+                    url: '/createPullGame',
+                    icon: 'feather icon-user',
+                    iconSvg: 'feather icon-user',
+                },
+                {
+                    id: 'createPullGame',
+                    title: 'ایجاد نظر سنجی',
                     type: 'item',
                     url: '/createPullGame',
                     icon: 'feather icon-user',

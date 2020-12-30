@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useCallback, useReducer } from 'react';
-import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown, Table, Collapse } from 'react-bootstrap';
-import { validateEmpty } from './../../App/components/formValidator/FormValidator'
 import Aux from "../../hoc/_Aux";
 import DatePicker from 'react-modern-calendar-datepicker';
 import ImageUpload from './../../App/components/imageUpload/ImageUpload'

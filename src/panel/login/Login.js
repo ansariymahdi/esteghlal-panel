@@ -1,25 +1,24 @@
 import React, { useState, useEffect, useReducer, useCallback } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Row, Col, Card, Form, Button, InputGroup, FormControl, DropdownButton, Dropdown, Table } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
-import Breadcrumb from "../../App/layout/AdminLayout/Breadcrumb";
 import { String } from "./../../common"
 import MobileLoginBro from './../../assets/icon/MobileLoginBro'
 import Logo from './../../assets/images/logo.png'
 import LoginIcon from './../../assets/images/login.png'
-// import Login from './../../assets/images/login.jpg'
 import InputLabel from './../../App/components/inputLabel/InputLabel'
-// import { withRouter } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
-import { AuthService } from './../../services'
+import { AuthService, HandleErrorServer } from './../../services'
 import { setLoginAuth } from './../../store/localeStorage/LocaleStorage'
 import { connect } from 'react-redux';
 import { setData } from './../../store/auth.action';
 import * as actionTypes from "./../../store/actions";
-import axios from 'axios'
-
-
+import { AppConstants } from './../../constants'
+import { useToasts } from 'react-toast-notifications'
 import { useHistory } from "react-router-dom";
+
+
+//start code this page 
+
+
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 const formReducer = (state, action) => {
     if (action.type === FORM_INPUT_UPDATE) {
@@ -36,6 +35,12 @@ const formReducer = (state, action) => {
             updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
             // console.log(key + updatedFormIsValid);
         }
+
+        console.log({
+            formIsValid: updatedFormIsValid,
+            inputValidities: updatedValidities,
+            inputValues: updatedValues,
+        })
         return {
             formIsValid: updatedFormIsValid,
             inputValidities: updatedValidities,
@@ -46,6 +51,8 @@ const formReducer = (state, action) => {
 };
 const Login = (props) => {
     const [inputValues, setInputValues] = useState({ email: "", password: "" })
+    const [formSubmitted, setFormSubmitted] = useState(false);
+    const { addToast } = useToasts()
 
     const dispatch = useDispatch();
     let history = useHistory();
@@ -64,7 +71,7 @@ const Login = (props) => {
                 username: false,
                 password: false,
             },
-            formIsValid: true,
+            formIsValid: false,
         },
     );
     const inputChangeHandler = useCallback(
@@ -99,57 +106,63 @@ const Login = (props) => {
         //     [name]: value
         // });
     }
+    const submitHandler = useCallback(async () => {
 
-    const onSubmitLogin = () => {
-        props.onShowLoader();
-        console.log(formState.inputValues);
+
+        if (!formSubmitted) {
+            setFormSubmitted(true);
+        }
+        if (!formState.formIsValid) {
+            console.log(formState.formIsValid);
+            return;
+        }
+        try {
+            props.onShowLoader();
+            onSubmitLogin(formState.inputValues);
+        } catch (err) {
+            console.log(err);
+        }
+    }, [dispatch, formState]);
+    const onSubmitLogin = (data) => {
+
         const formData = new FormData();
         formData.append('grant_type', 'password');
         formData.append('client_id', 'sse_gateway');
-        formData.append('username', formState.inputValues.username);
-        formData.append('password', formState.inputValues.password);
+        formData.append('username', data.username);
+        formData.append('password', data.password);
 
         AuthService.login(formData).subscribe(
             (response) => {
                 console.log(response); // again, no need to 'response.data'
 
-                setLoginAuth(response.access_token, formState.inputValues.username);
+                setLoginAuth(response.access_token, data.username);
                 setAuthData(formState.inputValues.username, response.access_token);
+                addToast(String.enter_to_app_successfully, {
+                    appearance: AppConstants.SUCCESS_MESSAGE,
+                    autoDismiss: true,
+                })
                 props.onShowLoader();
                 history.push("/app");
 
-
-
-                // DeviceStorage.storeStringData('@id_token', response.access_token);
-
-                // setAuthData(data, response.access_token);
-                // setIsLoading(false);
-                // console.log(response.data);
-                // props.navigation.dispatch(
-                //     CommonActions.reset({
-                //         index: 0,
-                //         routes: [{ name: 'Home' }],
-                //     }),
-                // );
             },
             (err) => {
+                props.onShowLoader();
                 // setIsLoading(false);
-                console.log(err);
+                console.log(err.response)
+                HandleErrorServer.catchError(err, AppConstants.FROM_LOGIN)
+                    .then((errs) => {
+                        console.log(errs);
+                        addToast(errs.messageToShow, {
+                            appearance: AppConstants.ERROR_MESSAGE,
+                            autoDismiss: true,
+                        })
+                    })
+                    .catch((errs2) => {
+                        console.log(errs2);
+                    });
             },
         );
 
-        // axios({
-        //     method: 'post',
-        //     url: `http://46.224.6.83:8000/auth/token`,
-        //     data: formData,
-
-        // }).then(response => {
-        //     // If request is good...
-        //     console.log(response.data);
-        // })
-        //     .catch((error) => {
-        //         console.log('error ' + error);
-        //     });;
     }
     return (
         <Aux>
@@ -158,9 +171,9 @@ const Login = (props) => {
                     <div class="row d-flex">
                         <div class="col-lg-6">
                             <div class="card1 pb-5">
-                                {/* <div class="row"> <img src={Logo} class="logo" /> </div> */}
+                                <div class="row"> <img src={Logo} class="logo" /> </div>
                                 <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
-                                    {/* <MobileLoginBro class="image" /> */}
+                                    <MobileLoginBro class="image" />
 
                                 </div>
                             </div>
@@ -192,6 +205,8 @@ const Login = (props) => {
                                         placeholder={String.enter_user_name}
                                         initialValue={formState.inputValues.username}
                                         initiallyValid={formState.inputValidities.username}
+                                        formSubmitted={formSubmitted}
+                                        required
                                         onInputChange={inputChangeHandler} />
 
                                 </div>
@@ -199,22 +214,28 @@ const Login = (props) => {
                                     <InputLabel
                                         id="password"
                                         label={String.password}
+                                        type={"password"}
                                         // errorText={Strings.please_enter_your_mobile_number}
                                         name={"password"}
                                         placeholder={String.enter_password}
                                         initialValue={formState.inputValues.password}
                                         initiallyValid={formState.inputValidities.password}
-                                        onInputChange={inputChangeHandler} />
+                                        formSubmitted={formSubmitted}
+                                        onInputChange={inputChangeHandler}
+                                        required
+                                        isPassword
+                                        showTogglePasswordIcon />
                                 </div>
 
                                 <div class="row px-3 mb-4">
                                     <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1" type="checkbox" name="chk" class="custom-control-input" />
                                         <label for="chk1" class="custom-control-label text-sm"> مرا به خاطر بسپار</label>
-                                        <label for="chk1" class="custom-control-label text-sm" data-testid="counter">1</label> </div>
+                                        {/* <label for="chk1" class="custom-control-label text-sm" data-testid="counter">1</label>  */}
+                                    </div>
 
                                     {/* <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a> */}
                                 </div>
-                                <div class="row mb-3 px-3 "> <button type="submit" data-testid="btn-login" class="btn btn-blue text-center" onClick={() => onSubmitLogin()}>ورود</button> </div>
+                                <div class="row mb-3 px-3 "> <button type="submit" data-testid="btn-login" class="btn btn-blue text-center w-100" onClick={() => submitHandler()}>ورود</button> </div>
                                 {/* <div class="row mb-4 px-3"> <small class="font-weight-bold">Don't have an account? <a class="text-danger ">Register</a></small> </div> */}
                             </div>
                         </div>
@@ -227,141 +248,10 @@ const Login = (props) => {
                 </div>
             </div>
         </Aux >
-        // <Aux>
-        //     <div class="bubble"></div>
-        //     <div class="bubble"></div>
-        //     <div class="bubble"></div>
-        //     <div class="bubble"></div>
-        //     <div class="bubble"></div>
-        //     <div class="main">
-        //         {/* <div className="card"> */}
-        //         {/* <div className="card-body text-center">    */}
-        //         <Logo width={150} height={150} />
-        //         {/* </div> */}
-        //         {/* </div> */}
-        //         <div className="card">
-        //             <div className="card-body text-center">
-        //                 <div>
-        //                     <div className="mb-4">
-        //                         {/* <i className="feather icon-unlock auth-icon" /> */}
 
-        //                     </div>
-        //                     <h3 className="mb-4">ورود</h3>
-        //                     <div class="text-right  mb-4">
-        //                         <Form.Label >نام کاربری</Form.Label>
-        //                         <Form.Control type="email" className="form-control" placeholder="tom mohajeri" />
-        //                     </div>
-        //                     <div className="text-right  mb-4">
-        //                         <Form.Label >گذرواژه</Form.Label>
-        //                         <Form.Control type="password" className="form-control" placeholder="*******" />
-
-        //                     </div>
-        //                     <div className="form-group text-right">
-        //                         <div className="checkbox checkbox-fill d-inline">
-        //                             <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" />
-        //                             <label htmlFor="checkbox-fill-a1" className="cr"> مرا به خاطر بسپار</label>
-
-
-        //                         </div>
-        //                     </div>
-        //                     <button className="btn btn-primary shadow-2 mb-4">{String.accept}</button>
-        //                 </div>
-
-        //                 {/* <p className="mb-2 text-muted">Forgot password? <NavLink to="/auth/reset-password-1">Reset</NavLink></p>
-        //                          <p className="mb-0 text-muted">Don’t have an account? <NavLink to="/auth/signup-1">Signup</NavLink></p> */}
-        //             </div>
-        //         </div>
-        //     </div>
-        // </Aux>
     )
 }
-// class Login extends React.Component {
-//     render() {
-//         return (
-//             <Aux>
-//                 <div class="bubble"></div>
-//                 <div class="bubble"></div>
-//                 <div class="bubble"></div>
-//                 <div class="bubble"></div>
-//                 <div class="bubble"></div>
-//                 <div class="main">
-//                     <div className="card">
-//                         <div className="card-body text-center">
-//                             <div>
-//                                 <div className="mb-4">
-//                                     <i className="feather icon-unlock auth-icon" />
-//                                 </div>
-//                                 <h3 className="mb-4">ورود</h3>
-//                                 <div class="text-right  mb-4">
-//                                     <Form.Label >نام کاربری</Form.Label>
-//                                     <Form.Control type="email" className="form-control" placeholder="tom mohajeri" />
-//                                 </div>
-//                                 <div className="text-right  mb-4">
-//                                     <Form.Label >گذرواژه</Form.Label>
-//                                     <Form.Control type="password" className="form-control" placeholder="*******" />
 
-//                                 </div>
-//                                 <div className="form-group text-right">
-//                                     <div className="checkbox checkbox-fill d-inline">
-//                                         <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" />
-//                                         <label htmlFor="checkbox-fill-a1" className="cr"> مرا به خاطر بسپار</label>
-
-
-//                                     </div>
-//                                 </div>
-//                                 <button className="btn btn-primary shadow-2 mb-4">{String.accept}</button>
-//                             </div>
-
-//                             {/* <p className="mb-2 text-muted">Forgot password? <NavLink to="/auth/reset-password-1">Reset</NavLink></p>
-//                                  <p className="mb-0 text-muted">Don’t have an account? <NavLink to="/auth/signup-1">Signup</NavLink></p> */}
-//                         </div>
-//                     </div>
-//                 </div>
-//             </Aux>
-//             // <Aux>
-//             //     <Breadcrumb />
-//             //     <div className="auth-wrapper">
-//             //         <div className="auth-content">
-//             //             <div className="auth-bg">
-//             //                 <span className="r" />
-//             //                 <span className="r s" />
-//             //                 <span className="r s" />
-//             //                 <span className="r" />
-//             //             </div>
-//             //             <div className="card">
-//             //                 <div className="card-body text-center">
-//             //                     <div className="mb-4">
-//             //                         <i className="feather icon-unlock auth-icon" />
-//             //                     </div>
-//             //                     <h3 className="mb-4">ورود</h3>
-//             //                     <div class="text-right  mb-4">
-//             //                         <Form.Label >نام کاربری</Form.Label>
-//             //                         <Form.Control type="email" className="form-control" placeholder="tom mohajeri" />
-//             //                     </div>
-//             //                     <div className="text-right  mb-4">
-//             //                         <Form.Label >گذرواژه</Form.Label>
-//             //                         <Form.Control type="password" className="form-control" placeholder="*******" />
-
-//             //                     </div>
-//             //                     <div className="form-group text-right">
-//             //                         <div className="checkbox checkbox-fill d-inline">
-//             //                             <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" />
-//             //                             <label htmlFor="checkbox-fill-a1" className="cr"> مرا به خاطر بسپار</label>
-
-
-//             //                         </div>
-//             //                     </div>
-//             //                     <button className="btn btn-primary shadow-2 mb-4">{String.accept}</button>
-//             //                     {/* <p className="mb-2 text-muted">Forgot password? <NavLink to="/auth/reset-password-1">Reset</NavLink></p>
-//             //                     <p className="mb-0 text-muted">Don’t have an account? <NavLink to="/auth/signup-1">Signup</NavLink></p> */}
-//             //                 </div>
-//             //             </div>
-//             //         </div>
-//             //     </div>
-//             // </Aux >
-//         );
-//     }
-// }
 const mapStateToProps = state => {
     return {
 

@@ -1,27 +1,68 @@
-import ServerConstants from "../constants/ServerConstants";
+import { ServerConstants, AppConstants } from "./../constants";
 // import AuthenticationService from "./Authentication.service";
 import { String } from "./../common";
+let errorObject = {
+  msg: '',
+  messageToShow: '',
+  //   data, //...some data we got back
+};
 const HandleError = {
-  catchError: (staus) => {
+  catchError: (error, fromRoute) => {
     return new Promise((resolve, reject) => {
-      switch (staus) {
+
+      const status = error.response.status;
+      switch (status) {
         case ServerConstants.NOT_FOUND:
           //  showSnackBar(String.username_password_incorrect, 2)
-          const errorObject = {
-            msg: "خطا",
-            messageToShow: String.username_password_incorrect,
+          errorObject = {
+            msg: 'خطا',
+            messageToShow: String.not_found,
             //   data, //...some data we got back
           };
           console.log(errorObject);
           resolve(errorObject);
           break;
+        case ServerConstants.BAD_REQUEST:
+          //  showSnackBar(String.username_password_incorrect, 2)
+          let text = "";
+          if (fromRoute === AppConstants.FROM_LOGIN) {
+            text = String.username_password_incorrect;
+          } else {
+            text = String.internal_server_error
+          }
+          errorObject = {
+            msg: 'خطا',
+            messageToShow: text,
+            //   data, //...some data we got back
+          };
+
+          console.log(errorObject);
+          resolve(errorObject);
+          break;
         case ServerConstants.SERVER_ERROR:
-          //  showSnackBar(String.internal_server_error, 2)
+          errorObject = {
+            msg: 'خطا',
+            messageToShow: String.internal_server_error,
+            //   data, //...some data we got back
+          };
+          resolve(errorObject);
           break;
         case ServerConstants.SERVICE_NOT_ACCESS:
+          errorObject = {
+            msg: 'خطا',
+            messageToShow: String.internal_server_error,
+            //   data, //...some data we got back
+          };
+          resolve(errorObject);
           //  showSnackBar(String.internal_server_error, 2)
           break;
         case ServerConstants.SERVICE_NOT_SUPPORTED:
+          errorObject = {
+            msg: 'خطا',
+            messageToShow: String.internal_server_error,
+            //   data, //...some data we got back
+          };
+          resolve(errorObject);
           //  showSnackBar(String.internal_server_error, 2)
           break;
         case ServerConstants.EXPIRED_TOKEN:
@@ -38,7 +79,7 @@ const HandleError = {
           // });
 
           const errorObject2 = {
-            msg: "خطا",
+            msg: 'خطا',
             messageToShow: String.username_password_incorrect,
             //   data, //...some data we got back
           };

@@ -23,7 +23,7 @@ function Routes(props) {
 			}
 			<Switch>
 				<Route path="/app">
-					<PrivateRoutes />
+					<PrivateRoutes {...props} />
 				</Route>
 				<Route path="">
 					<Auth />

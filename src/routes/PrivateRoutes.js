@@ -16,7 +16,7 @@ import NavBar from './../App/layout/AdminLayout//NavBar';
 // import Aux from "../../../hoc/_Aux";
 import './../assets/scss/style.scss';
 // import * as actionTypes from "../../../store/actions";
-function PrivateRoutes() {
+function PrivateRoutes(props) {
 	const match = useRouteMatch('/app');
 	let allowedRoutes = [];
 
@@ -30,7 +30,7 @@ function PrivateRoutes() {
 			{/* <Aux> */}
 			{/* <Fullscreen enabled={this.props.isFullScreen}> */}
 			<Navigation prefix={match.path} />
-			<NavBar />
+			<NavBar {...props} />
 			<div className="pcoded-main-container"
 			// onClick={() => this.mobileOutClickHandler}
 			>
@@ -47,7 +47,7 @@ function PrivateRoutes() {
 												</Switch>
 											</Suspense> */}
 
-									<MapAllowedRoutes routes={allowedRoutes} basePath="/app" />
+									<MapAllowedRoutes routes={allowedRoutes} basePath="/app" {...props} />
 								</div>
 							</div>
 						</div>

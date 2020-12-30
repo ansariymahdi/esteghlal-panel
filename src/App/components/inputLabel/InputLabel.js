@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useReducer } from 'react';
 
-// import ShowIcon from "./../../assets/icons/show.svg";
-// import HideIcon from "./../../assets/icons/hide.svg";
+import ShowIcon from "./../../../assets/icon/Show";
+import HideIcon from "./../../../assets/icon/Hide";
 // import Close from "./../../assets/icons/cancel.svg";
 import { String } from "./../../../common";
 // import { Typography } from "./../../styles";
@@ -66,6 +66,7 @@ const InputLabel = props => {
         // const mobileRegex = /^[0][9][1][0-9]{8,8}$/;
         let isValid = true;
         if (props.required && text?.trim().length === 0 || typeof (text) == "undefined") {
+            console.log("salaminput" + isValid)
             setHasErrors((prevState) => {
                 return ({
                     email: false,
@@ -77,7 +78,37 @@ const InputLabel = props => {
                 })
             });
             isValid = false;
-        } else if (isValid) {
+        }
+        else if (props.min != null && +text < props.min) {
+            //('min error');
+            setHasErrors((prevState) => {
+                return ({
+                    email: false,
+                    minLength: false,
+                    max: false,
+                    required: false,
+                    min: true,
+                    matchPassword: false,
+                })
+            });
+            isValid = false;
+        }
+        else if (props.max != null && +text > props.max) {
+            //('max error');
+            setHasErrors((prevState) => {
+                return ({
+                    email: false,
+                    minLength: false,
+                    min: false,
+                    required: false,
+                    max: true,
+                    matchPassword: false,
+                })
+            });
+            isValid = false;
+        }
+
+        else if (isValid) {
             setHasErrors((prevState) => {
                 return ({
                     email: false,
@@ -248,7 +279,7 @@ const InputLabel = props => {
         // }).start();
     }, [isFocused]);
 
-    const { label, name, placeholder, type, formSubmitted, ...newprops } = props;
+    const { label, name, placeholder, type, formSubmitted, isPassword, ...newprops } = props;
     const lableColor = props.placeHolderColor ? props.placeHolderColor : '#fff';
 
     // let labelBlurStyle = null
@@ -301,14 +332,14 @@ const InputLabel = props => {
     //     };
     // }
 
-    // let passowrdShowHideIcon = null;
-    // if (props.isPassword && props.showTogglePasswordIcon) {
-    //     if (showPassword) {
-    //         passowrdShowHideIcon = <TouchableWithoutFeedback onPress={() => setShowPassword(!showPassword)}><View style={styles.passwordIcon}><HideIcon height={12} fill={'#000'} /></View></TouchableWithoutFeedback>;
-    //     } else {
-    //         passowrdShowHideIcon = <TouchableWithoutFeedback onPress={() => setShowPassword(!showPassword)}><View style={styles.passwordIcon}><ShowIcon height={12} fill={'#000'} /></View></TouchableWithoutFeedback>;
-    //     }
-    // }
+    let passowrdShowHideIcon = null;
+    if (props.isPassword && props.showTogglePasswordIcon) {
+        if (showPassword) {
+            passowrdShowHideIcon = <div class="password-img" onClick={() => setShowPassword(!showPassword)}><HideIcon height={20} width={20} fill={'#000'} /></div>;
+        } else {
+            passowrdShowHideIcon = <div class="password-img" onClick={() => setShowPassword(!showPassword)}><ShowIcon height={20} width={20} fill={'#000'} /></div>;
+        }
+    }
 
     // if (props.isClosable) {
     //     if (inputState.value !== '') {
@@ -380,42 +411,55 @@ const InputLabel = props => {
     // }
     let _renderError = "";
     if (hasErrors.required && formSubmitted) {
-        console.log("Required fields" + props.formSubmitted)
+
         _renderError = String.please_enter_this_field;
 
+    } else if (hasErrors.min && props.formSubmitted) {
+        _renderError = String.please_enter_this_field;
+
+    } else if (hasErrors.max && props.formSubmitted) {
+        _renderError = String.please_enter_this_field;
+    }
+    const typeInput = () => {
+        if (isPassword) {
+            if (showPassword) {
+                return "text";
+
+            } else {
+                return "password";
+            }
+        } else {
+            return type;
+        }
     }
 
     return (
-        <div class="row px-3">
-            <label class="mb-1">
+        <div class="col">
+            <label class="row mb-1 ">
                 <h6 class="mb-0 text-sm form-label" >{label}</h6>
             </label >
-            <input class="form-control" type={type} name={name} placeholder={placeholder}
-                //  onChange={(e) => handleInputChange(e)}
-                autocomplete="on"
-                {...newprops}
-                // style={[{
-                //     height: Scale.verticalScale(50),
-                //     paddingVertical: Scale.moderateScale(4),
+            <div class="row ">
+                <input class="form-control" type={typeInput()} name={name} placeholder={placeholder}
 
-                //     textAlign: 'right',
-                //     fontSize: Typography.FONT_SIZE_12,
-                //     color: (props.editable == false) ? '#fff' : (props.color ? props.color : '#fff'),
-                //     paddingHorizontal: Scale.moderateScale(3),
-                //     paddingLeft: props.isPassword ? Scale.moderateScale(50) : 3,
-                // // }, inputErrorStyle]}
-                // onFocus={handleFocus}
-                // onBlur={handleBlur}
-                // onSubmitEditing={onSubmitEditing}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                value={inputState.value}
-                onBlur={handleBlur}
+                    autocomplete="on"
+                    {...newprops}
 
-                // blurOnSubmit
-                // secureTextEntry={props.isPassword && !showPassword}
-                onChange={(e) => textChangeHandler(e)} />
-            <label className="input-error">{_renderError}</label>
+                    // onFocus={handleFocus}
+                    // onBlur={handleBlur}
+                    // onSubmitEditing={onSubmitEditing}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    value={inputState.value}
+                    onBlur={handleBlur}
+
+                    // blurOnSubmit
+                    // secureTextEntry={props.isPassword && !showPassword}
+                    onChange={(e) => textChangeHandler(e)} />
+                {passowrdShowHideIcon}
+            </div>
+            <div class="row ">
+                <label className="input-error">{_renderError}</label>
+            </div>
         </div >
     );
 };

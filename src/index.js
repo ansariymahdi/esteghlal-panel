@@ -11,6 +11,8 @@ import authReducer from './store/auth.reducer';
 import Routes from './routes';
 import { ToastProvider, useToasts } from 'react-toast-notifications'
 import { createBrowserHistory } from 'history';
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 import $ from 'jquery';
 
 window.jQuery = $;
@@ -21,6 +23,17 @@ const rootReducer = combineReducers({
     authReducer: authReducer,
 });
 const store = createStore(rootReducer);
+Sentry.init({
+    dsn: "https://7f57379b77924bbbbc97cdead6fb9e96@o497174.ingest.sentry.io/5572889",
+    autoSessionTracking: true,
+    integrations: [
+        new Integrations.BrowserTracing(),
+    ],
+
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+});
 
 const app = (
 
